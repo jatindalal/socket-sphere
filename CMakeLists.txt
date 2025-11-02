@@ -19,8 +19,7 @@ add_executable(socket_sphere_server
 )
 target_include_directories(socket_sphere_server
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/include/server
-    ${PROJECT_SOURCE_DIR}/include/common
+    ${PROJECT_SOURCE_DIR}/include/
 )
 target_link_libraries(socket_sphere_server
     PRIVATE 
@@ -32,8 +31,7 @@ add_executable(socket_sphere_client
     src/client.cpp
 )
 target_include_directories(socket_sphere_client PRIVATE
-    ${PROJECT_SOURCE_DIR}/include/client
-    ${PROJECT_SOURCE_DIR}/include/common
+    ${PROJECT_SOURCE_DIR}/include/
 )
 target_link_libraries(socket_sphere_client
     PRIVATE

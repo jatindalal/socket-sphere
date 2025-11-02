@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 
-#include "TCPServer.hpp"
+#include "server/TCPServer.hpp"
 #include "boost/asio/io_context.hpp"
 
 #define PORT 8000
@@ -19,6 +19,7 @@ int main()
     for (unsigned i = 0; i < num_threads; ++i)
         workers.emplace_back([&context] () { context.run(); });
 
+    std::cout << "Server running on port " << PORT << " with " << num_threads << " threads\n";
     for (auto& worker: workers) worker.join();
 
     return 0;
