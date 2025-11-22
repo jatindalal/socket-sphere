@@ -24,6 +24,7 @@ target_include_directories(socket_sphere_server
 target_link_libraries(socket_sphere_server
     PRIVATE 
     Boost::asio
+    Boost::endian
 )
 target_compile_features(socket_sphere_server PRIVATE cxx_std_20)
 
@@ -36,5 +37,6 @@ target_include_directories(socket_sphere_client PRIVATE
 target_link_libraries(socket_sphere_client
     PRIVATE
     Boost::asio
+    Boost::endian
 )
 target_compile_features(socket_sphere_client PRIVATE cxx_std_20)
