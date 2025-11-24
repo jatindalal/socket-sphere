@@ -7,6 +7,8 @@
 #include <boost/endian.hpp>
 #include <cstddef>
 #include <cstdint>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <iostream>
 
@@ -23,9 +25,13 @@ public:
     {
         auto endpoints = m_resolver.resolve(host, port);
         boost::asio::async_connect(m_socket, endpoints,
-            [this] (const boost::system::error_code& ec, tcp::endpoint) {
+            [this, host, port] (const boost::system::error_code& ec, tcp::endpoint) {
                 if (!ec) {
                     start_read_header();
+                } else {
+                    std::stringstream error;
+                    error << "Couldn't connect to " << host << ":" << port;
+                    throw std::runtime_error(error.str());
                 }
             }
         );
