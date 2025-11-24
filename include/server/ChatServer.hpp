@@ -14,7 +14,7 @@
 #include <boost/endian.hpp>
 #include <memory>
 
-class TCPServer
+class ChatServer
 {
 public:
     using tcp = boost::asio::ip::tcp;
@@ -33,7 +33,7 @@ public:
         : m_socket(std::move(socket))
         , m_id (random_string(s_client_id_len)) {}
     };
-    explicit TCPServer(boost::asio::io_context& context,
+    explicit ChatServer(boost::asio::io_context& context,
                        unsigned short port)
         : m_context(context)
         , m_acceptor(context, tcp::endpoint(tcp::v4(), port))

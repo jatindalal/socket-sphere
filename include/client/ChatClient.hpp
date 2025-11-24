@@ -10,11 +10,11 @@
 #include <string>
 #include <iostream>
 
-class TCPClient
+class ChatClient
 {
 public:
     using tcp = boost::asio::ip::tcp;
-    explicit TCPClient(boost::asio::io_context& context)
+    explicit ChatClient(boost::asio::io_context& context)
     : m_context(context)
     , m_socket(m_context)
     , m_resolver(m_context) {}

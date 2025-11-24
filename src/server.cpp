@@ -3,7 +3,7 @@
 #include <iostream>
 #include <thread>
 
-#include "server/TCPServer.hpp"
+#include "server/ChatServer.hpp"
 #include "boost/asio/io_context.hpp"
 
 #define PORT 8000
@@ -11,8 +11,7 @@
 int main()
 {
     boost::asio::io_context context;
-    TCPServer server(context, PORT);
-
+    ChatServer server(context, PORT);
 
     std::vector<std::thread> workers;
     unsigned num_threads = std::thread::hardware_concurrency();

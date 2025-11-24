@@ -1,11 +1,8 @@
-#include "boost/asio.hpp"
-#include "boost/asio/connect.hpp"
 #include "boost/asio/io_context.hpp"
 
 #include "common/Utils.hpp"
-#include "client/TCPClient.hpp"
+#include "client/ChatClient.hpp"
 
-#include <chrono>
 #include <iostream>
 #include <thread>
 
@@ -14,7 +11,7 @@ using boost::asio::ip::tcp;
 int main()
 {
     boost::asio::io_context io_context;
-    TCPClient client(io_context);
+    ChatClient client(io_context);
     client.connect("127.0.0.1", "8000");
 
     std::cout << "connected to server\n";
