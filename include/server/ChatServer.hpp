@@ -56,7 +56,7 @@ public:
         );
     }
 
-    void start_read_header(std::shared_ptr<Client> client) 
+    void start_read_header(std::shared_ptr<Client> client)
     {
         boost::asio::async_read(client->m_socket,
             boost::asio::buffer(client->message_header),
@@ -147,7 +147,7 @@ public:
     {
         for (auto& client: m_clients) {
             if (!client || client == sender) continue;
-            
+
             enqueue_write(client, message);
         }
     }

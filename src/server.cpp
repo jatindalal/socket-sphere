@@ -1,7 +1,6 @@
 #include <boost/asio.hpp>
 #include <csignal>
 #include <iostream>
-#include <thread>
 
 #include "server/ChatServer.hpp"
 #include "boost/asio/io_context.hpp"
@@ -13,13 +12,8 @@ int main()
     boost::asio::io_context context;
     ChatServer server(context, PORT);
 
-    std::vector<std::thread> workers;
-    unsigned num_threads = std::thread::hardware_concurrency();
-    for (unsigned i = 0; i < num_threads; ++i)
-        workers.emplace_back([&context] () { context.run(); });
-
-    std::cout << "Server running on port " << PORT << " with " << num_threads << " threads\n";
-    for (auto& worker: workers) worker.join();
+    std::cout << "Server running on port " << PORT << std::endl;
+    context.run();
 
     return 0;
 }
