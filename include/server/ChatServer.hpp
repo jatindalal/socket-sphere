@@ -30,7 +30,7 @@ public:
         std::array<char, 4> m_message_header;
         std::vector<char> m_message_body;
 
-        std::deque<std::string> m_write_queue;
+        std::deque<std::vector<char>> m_write_queue;
         bool m_writing = false;
 
         std::list<std::shared_ptr<Client>>::iterator m_self_iterator;
@@ -65,6 +65,7 @@ private:
     void add_client(tcp::socket&& socket) {
         auto client = std::make_shared<Client>(std::move(socket));
         m_clients.push_back(client);
+        client->m_self_iterator = std::prev(m_clients.end());
 
         std::cout << "client connected: "
                   << client->m_socket.remote_endpoint() << " id: "
@@ -126,8 +127,7 @@ private:
         uint32_t len = static_cast<uint32_t>(message.size());
         boost::endian::big_uint32_t len_be = len;
 
-        std::string packet;
-        packet.resize(4 + message.size());
+        std::vector<char> packet(4 + message.size());
         std::memcpy(packet.data(), &len_be, 4);
         std::memcpy(packet.data() + 4, message.data(), message.size());
 
@@ -161,17 +161,19 @@ private:
     void handle_disconnect(const std::shared_ptr<Client>& client)
     {
         std::cout << "Client " << client->m_id << " disconnected\n";
-        client->m_socket.shutdown(tcp::socket::shutdown_both);
-        client->m_socket.close();
+        boost::system::error_code ignore;
+        client->m_socket.shutdown(tcp::socket::shutdown_both, ignore);
+        client->m_socket.close(ignore);
         m_clients.erase(client->m_self_iterator);
     }
 
     void broadcast(const std::string& message,
                    const std::shared_ptr<Client>& sender)
     {
-        for (auto& client: m_clients) {
-            if (client == sender) continue;
-            enqueue_write(client, message);
+        for (auto it = m_clients.begin(); it != m_clients.end(); ) {
+            auto& client = *it;
+            ++it; // enqueue_write can call handle_disconnect which can lead to iterator modification
+            if (client != sender) enqueue_write(client, message);
         }
     }
 };
